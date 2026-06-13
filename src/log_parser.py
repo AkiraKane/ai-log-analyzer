@@ -148,8 +148,8 @@ def _parse_text_log(line: str) -> Optional[LogEntry]:
                         raw=line,
                     )
 
-    # Fallback: detect level anywhere in line
-    level_match = re.search(r'\b(ERROR|WARN|WARNING|INFO|DEBUG|FATAL|CRITICAL)\b', line, re.IGNORECASE)
+    # Fallback: detect level only at the start of the line or after a timestamp
+    level_match = re.match(r'^\s*(?:\d{4}[-/]\d{2}[-/]\d{2}[T ]\d{2}:\d{2}:\d{2}[^\s]*\s+)?(?:\[[\d\-T:\.]+\]\s+)?\b(ERROR|WARN|WARNING|INFO|DEBUG|FATAL|CRITICAL)\b', line, re.IGNORECASE)
     if level_match:
         level = level_match.group(1).upper()
         if level == "WARNING":
